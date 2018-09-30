@@ -4,15 +4,12 @@
   "description": "익스프레스로 만드는 SNS 서비스",
   "main": "app.js",
   "scripts": {
+	"test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=production pm2 start app.js",
     "dev": "nodemon app"
   },
   "author": "JiWoong",
   "license": "MIT",
-  "engines": {
-    "node": "10.10.0",
-    "npm": "6.4.1"
-  },
   "dependencies": {
     "axios": "^0.18.0",
     "bcrypt": "^3.0.0",

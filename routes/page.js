@@ -127,7 +127,7 @@ router.get('/page/:cur/hashtag', (req, res, next) => {
 	const query = req.query.hashtag; 
 	console.log("해쉬태그"+ query);
 	if(!query) {            //해시태그가 빈 문자열인 경우 메인페이지로
-		return res.redirect('/main/1');
+		return res.redirect('/page/1');
 	}
 	Post.findAndCount({
 		include: [{    // 조인할 대상을 include에 배열로 넘겨준다. 
