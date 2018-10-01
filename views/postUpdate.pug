@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  .timeline
+    div
+      - var postId = posts.id
+      form#update-form(action=`/post/${postId}/update` method='post' enctype='multipart/form-data')
+        .input-group
+          input#twit(name='contents' maxlength=140 type=textarea value=posts.content)
+        .img-preview
+          -postImg = posts.img
+          if(postImg)
+            img#img-preview(src=postImg style='display: inline;' width='250' alt='미리보기')
+          if(!postImg)  
+            img#img-preview(src=postImg style='display: none;' width='250' alt='미리보기')
+          input#img-url(type='hidden' name='url' value=postImg)
+        div
+          label#img-label(for='img') 사진 업로드
+          input#img(type='file' accept='image/*')
+          button#twit-btn.btn(type='submit') 짹짹
+  script.
+    if (document.getElementById('img')) {
+      document.getElementById('img').addEventListener('change', function (e) {
+        var formData = new FormData();
+        console.log(this, this.files);
+        formData.append('img', this.files[0]);
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            var url = JSON.parse(xhr.responseText).url;
+            document.getElementById('img-url').value = url;
+            document.getElementById('img-preview').src = url;
+            document.getElementById('img-preview').style.display = 'inline';
+          } else {
+            console.error(xhr.responseText);
+          }
+        };
+        xhr.open('POST', '/post/img');
+        xhr.send(formData);
+      });
+    }

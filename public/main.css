@@ -76,6 +76,12 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   background: lightcoral;
   overflow: hidden;
 }
+#update-form {
+  border-bottom: 1px solid silver;
+  padding: 10px;
+  background: #ff8040;
+  overflow: hidden;
+}
 #img-preview { max-width: 100%; }
 #img-label {
   float: left;
@@ -105,6 +111,51 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
 }
 .twit-author { display: inline-block; font-weight: bold; margin-right: 10px; }
 .twit-follow {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.twit-unfollow {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.twit-like {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.twit-unlike {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.twit-update {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.twit-delete {
   padding: 1px 5px;
   background: #fff;
   border: 1px solid silver;

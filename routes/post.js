@@ -124,7 +124,7 @@ router.post('/:id/like', async(req, res, next) => {
 	}
 });
 
-router.delete('/:id/like', async (req, res, next) => {
+router.delete('/:id/unlike', async (req, res, next) => {
 	try {
 		const post = await Post.find({ where: { id: req.params.id}});
 		await post.removeLiker(req.user.id);
@@ -134,6 +134,45 @@ router.delete('/:id/like', async (req, res, next) => {
 		next(error);
 	}
 });
+
+
+//----------------------게시글 수정------------------
+router.get('/:id/update', async(req, res, next) => {
+	try {
+		const posts = await Post.find({ where: { id: req.params.id} });
+	    var str = JSON.stringify(posts);
+		return res.render('postUpdate', {
+			posts: posts,
+			user: req.user,
+		});
+	} catch(error){
+		console.error(error);
+		next(error);
+	}
+});
+
+
+router.post('/:id/update', isLoggedIn, upload2.none(), async(req, res, next) => {
+	try {
+		const post = await Post.update({
+			content: req.body.contents,
+			img: req.body.url,
+		}, {
+			where: { id: req.params.id}
+		});
+		const hashtags = req.body.contents.match(/#[^\s]*/g); 
+		if(hashtags) {
+			const result = await Promise.all(hashtags.map(tag => Hashtag.findOrCreate({
+				where: { title: tag.slice(1).toLowerCase() },   //앞에 # 같은거 자르고 찾거나 저장한다는 뜻
+			})));
+		}
+		res.redirect('/page/1');
+	} catch(error) {
+		console.error(error);
+		next(error);
+	}
+});
+
 
 
 module.exports = router;

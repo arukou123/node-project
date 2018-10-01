@@ -33,11 +33,13 @@ block content
             button.twit-unfollow 팔로우 끊기
           -const like = user && twit && twit.Liker.map(l => l.id).includes(user.id);  
           if user && !like && user.id !== twit.user.id                                     
-            button.like 좋아요
+            button.twit-like 좋아요
           else if user && like && user.id !== twit.user.id           
-            button.unlike 좋아요 취소              
+            button.twit-unlike 좋아요 취소              
           if user && user.id === twit.user.id
-            button.delete 게시글 삭제  
+            -const twitId = twit.id;
+            a.twit-update(href=`/post/${twitId}/update` style="text-decoration:none") 게시글 수정
+            button.twit-delete 게시글 삭제  
           .twit-content= twit.content
           if twit.img
             .twit-img
@@ -146,7 +148,7 @@ block content
         }
       });
     });
-    [].forEach.call(document.querySelectorAll('.like'), function (tag) {
+    [].forEach.call(document.querySelectorAll('.twit-like'), function (tag) {
       tag.addEventListener('click', function () {
         var isLoggedIn = document.querySelector('#my-id');
         var twitId = tag.parentNode.querySelector('.twit-id').value;
@@ -164,7 +166,7 @@ block content
         }
       });
     });
-    [].forEach.call(document.querySelectorAll('.unlike'), function (tag) {
+    [].forEach.call(document.querySelectorAll('.twit-unlike'), function (tag) {
       tag.addEventListener('click', function () {
         var isLoggedIn = document.querySelector('#my-id');
         var twitId = tag.parentNode.querySelector('.twit-id').value;
@@ -182,7 +184,7 @@ block content
         }
       });
     });
-    [].forEach.call(document.querySelectorAll('.delete'), function (tag) {
+    [].forEach.call(document.querySelectorAll('.twit-delete'), function (tag) {
       tag.addEventListener('click', function () {
         var isLoggedIn = document.querySelector('#my-id');
         var twitId = tag.parentNode.querySelector('.twit-id').value;
@@ -202,4 +204,3 @@ block content
         }
       });
     });   
-                  
