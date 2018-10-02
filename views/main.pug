@@ -38,15 +38,21 @@ block content
             button.twit-unfollow 팔로우 끊기
           -const like = user && twit && twit.Liker.map(l => l.id).includes(user.id);  
           if user && !like && user.id !== twit.user.id                                     
-            button.twit-like 좋아요
+            button.twit-like 추천
           else if user && like && user.id !== twit.user.id           
-            button.twit-unlike 좋아요 취소              
+            button.twit-unlike 추천 취소              
           if user && user.id === twit.user.id
             -const twitId = twit.id;
             -var postPage = paging.curPage;
             a.twit-update(href=`/post/${twitId}/update/page/${postPage}` style="text-decoration:none") 게시글 수정
             button.twit-delete 게시글 삭제
-          .twit-time= `${mm}/${dd} ${ho}:${mi}`   
+          .twit-time= `${mm}/${dd} ${ho}:${mi}`
+          -var liker = twit.Liker.length
+          if liker >= 5
+            img#best-img(src='/img/medal.jpg' style= width="17" height="25")
+            .twit-liker= `추천   ${liker}`
+          else if liker < 5 
+            .twit-liker= `추천   ${liker}`
           .twit-content= twit.content
           if twit.img
             .twit-img
