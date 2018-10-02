@@ -4,7 +4,8 @@ block content
   .timeline
     div
       - var postId = posts.id
-      form#update-form(action=`/post/${postId}/update` method='post' enctype='multipart/form-data')
+      - var postPage = page
+      form#update-form(action=`/post/${postId}/update/page/${postPage}` method='post' enctype='multipart/form-data')
         .input-group
           input#twit(name='contents' maxlength=140 type=textarea value=posts.content)
         .img-preview

@@ -38,7 +38,8 @@ block content
             button.twit-unlike 좋아요 취소              
           if user && user.id === twit.user.id
             -const twitId = twit.id;
-            a.twit-update(href=`/post/${twitId}/update` style="text-decoration:none") 게시글 수정
+            -var postPage = paging.curPage;
+            a.twit-update(href=`/post/${twitId}/update/page/${postPage}` style="text-decoration:none") 게시글 수정
             button.twit-delete 게시글 삭제  
           .twit-content= twit.content
           if twit.img

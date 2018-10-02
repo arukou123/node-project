@@ -136,14 +136,15 @@ router.delete('/:id/unlike', async (req, res, next) => {
 });
 
 
-//----------------------게시글 수정------------------
-router.get('/:id/update', async(req, res, next) => {
+//-----------------------------------------게시글 수정-----------------------------------
+router.get('/:id/update/page/:cur', async(req, res, next) => {
 	try {
 		const posts = await Post.find({ where: { id: req.params.id} });
 	    var str = JSON.stringify(posts);
 		return res.render('postUpdate', {
 			posts: posts,
 			user: req.user,
+			page: req.params.cur,
 		});
 	} catch(error){
 		console.error(error);
@@ -152,7 +153,7 @@ router.get('/:id/update', async(req, res, next) => {
 });
 
 
-router.post('/:id/update', isLoggedIn, upload2.none(), async(req, res, next) => {
+router.post('/:id/update/page/:cur', isLoggedIn, upload2.none(), async(req, res, next) => {
 	try {
 		const post = await Post.update({
 			content: req.body.contents,
@@ -166,7 +167,9 @@ router.post('/:id/update', isLoggedIn, upload2.none(), async(req, res, next) => 
 				where: { title: tag.slice(1).toLowerCase() },   //앞에 # 같은거 자르고 찾거나 저장한다는 뜻
 			})));
 		}
-		res.redirect('/page/1');
+		console.log("페이지" + req.params.cur);   
+		const page= req.params.cur;   //현재 페이지를 저장해서 수정 끝나면 그 페이지로 넘김
+		res.redirect(`/page/${page}`);
 	} catch(error) {
 		console.error(error);
 		next(error);
