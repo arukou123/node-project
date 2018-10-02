@@ -22,6 +22,11 @@ block content
         .twit
           input.twit-user-id(type='hidden' value=twit.user.id)
           input.twit-id(type='hidden' value=twit.id)
+          -date = twit.createdAt
+          -const mm = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : (date.getMonth() +1)
+          -const dd = date.getDate() < 10 ? `0${date.getDate() + 1}` : (date.getDate() +1)
+          -const ho = date.getHours() < 10 ? `0${date.getHours() + 1}` : (date.getHours() +1)
+          -const mi = date.getMinutes() < 10 ? `0${date.getMinutes() + 1}` : (date.getMinutes() +1)
           .twit-author= twit.user.nick
           -const follow = user && user.Followings.map(f => f.id).includes(twit.user.id);
           //twit.Liker.map(l => l.id는 page 라우터에서 posts로 값을 넘길 때, Liker 배열을 가져옴
@@ -40,7 +45,8 @@ block content
             -const twitId = twit.id;
             -var postPage = paging.curPage;
             a.twit-update(href=`/post/${twitId}/update/page/${postPage}` style="text-decoration:none") 게시글 수정
-            button.twit-delete 게시글 삭제  
+            button.twit-delete 게시글 삭제
+          .twit-time= `${mm}/${dd} ${ho}:${mi}`   
           .twit-content= twit.content
           if twit.img
             .twit-img
