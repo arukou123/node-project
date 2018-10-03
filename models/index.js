@@ -16,12 +16,14 @@ db.Sequelize = Sequelize;
 //-----------------------------DB생성 해주는 핵심인 것 같다.------------------------------
 db.User = require('./user')(sequelize, Sequelize);
 db.Post = require('./post')(sequelize, Sequelize);
+db.Comment = require('./comment')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag')(sequelize, Sequelize);
 
 
 //-----------------------------User와 Post의 관계 생성. 1:N------------------------------
 db.User.hasMany(db.Post);        //User 모델과 Post 모델은 1:N 관계이므로 hasMany와 belongsTo로 연결. 시퀄라이즈는 Post 모델에 userId 컬럼을 추가합니다.
 db.Post.belongsTo(db.User);
+
 
 //-----------------------------Post와 Hashtag 관계 생성. N:M------------------------------
 db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag'}); //N:M 관계이므로 belongsToMany 메서드로 정의 . 관계를 분석하여 PostHashTag라는 테이블을 자도으로 생성.
@@ -45,6 +47,14 @@ db.User.belongsToMany(db.User, {		//이렇게 NodeBird의 모델은 직접 생�
 //--------------------------User와 Post의 '게시글 추천' N:M 관계----------------
 db.User.belongsToMany(db.Post, { through: 'Like'});    // Like 테이블에 userId와 PostId 값이 있다.
 db.Post.belongsToMany(db.User, { through: 'Like', as: 'Liker'});
+
+//-----------------------------Comment와 Post, User의 관계 생성. 1:N------------------------------
+db.Post.hasMany(db.Comment);       
+db.Comment.belongsTo(db.Post);
+
+db.User.hasMany(db.Comment);        
+db.Comment.belongsTo(db.User);
+
 
 
 

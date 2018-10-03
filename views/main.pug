@@ -1,5 +1,4 @@
 extends layout 
-
 block content
   .timeline
     if user
@@ -25,7 +24,7 @@ block content
           -date = twit.createdAt
           -const mm = date.getMonth() < 9 ? `0${date.getMonth() + 1}` : (date.getMonth() +1)
           -const dd = date.getDate() < 10 ? `0${date.getDate() + 1}` : (date.getDate() +1)
-          -const ho = date.getHours() < 10 ? `0${date.getHours() + 1}` : (date.getHours() +1)
+          -const ho = date.getHours() < 10 ? `0${date.getHours()}` : (date.getHours())
           -const mi = date.getMinutes() < 10 ? `0${date.getMinutes() + 1}` : (date.getMinutes() +1)
           .twit-author= twit.user.nick
           -const follow = user && user.Followings.map(f => f.id).includes(twit.user.id);
@@ -53,10 +52,38 @@ block content
             .twit-liker= `추천   ${liker}`
           else if liker < 5 
             .twit-liker= `추천   ${liker}`
-          .twit-content= twit.content
+          .twit-content(style='padding-top:40px; padding-bottom:40px;')= twit.content
           if twit.img
             .twit-img
               img(src=twit.img alt='섬네일')
+          table#commentTable(style='border-collapse: collapse; display: none;')
+            tbody.commentList
+              tr(style='font-size:13px; border-top: 2px solid blue;')
+                th(style= 'width: 80px; ') 아이디
+                th(style= 'width: 250px; ') 내용
+                th(style= 'width: 150px; ') 시간
+            for com in twit.comments
+              tr.commentLine#changeComment(style='font-size:13px; border-top: 1.5px solid rgba(0, 0, 0, .2); height:25px;' )
+                -comdate = com.createdAt
+                -const mm = comdate.getMonth() < 9 ? `0${comdate.getMonth() + 1}` : (comdate.getMonth() +1)
+                -const dd = comdate.getDate() < 10 ? `0${comdate.getDate() + 1}` : (comdate.getDate() +1)
+                -const ho = comdate.getHours() < 10 ? `0${comdate.getHours()}` : (comdate.getHours())
+                -const mi = comdate.getMinutes() < 10 ? `0${comdate.getMinutes() + 1}` : (comdate.getMinutes() +1)
+                td(style='text-align:center; ')= com.commenter
+                td(style='text-align:center; ')= com.content  
+                td(style='text-align:center; ')= `${mm}/${dd} ${ho}:${mi}`
+                  if user && user.id === com.userId
+                    input.comment-id(type='hidden' value=com.id)
+                    btn.delete-btn
+            -var rowCount = twit.comments.length    
+          button#comBtn.commnet-more= `댓글  ${rowCount}`
+          button#closeBtn.commnet-close 접기  
+          div#comment-form(method='post')
+            .input-group(style='padding-top:15px; ')
+              input.twit-id(type='hidden' value=twit.id)
+              input#twit-id(type='hidden' value=twit.id)
+              textarea(style='width:470px; height:60px; ')#comment(name='content' maxlength=140)
+              button.comment-btn 등록  
     -var curPage = paging.curPage;
     -var page_list_size = paging.page_list_size;
     -var page_size = paging.page_size;
@@ -161,6 +188,25 @@ block content
         }
       });
     });
+    [].forEach.call(document.querySelectorAll('.comment-btn'), function (tag) {
+      tag.addEventListener('click', function () {
+        var isLoggedIn = document.querySelector('#my-id');
+        var twitId = tag.parentNode.querySelector('.twit-id').value;
+          if(isLoggedIn) {
+            const param = tag.parentNode.querySelector('#comment').value;
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function (comments) {
+              if (xhr.status === 200) {
+                location.reload();
+              } else {
+                console.error(xhr.responseText);
+              }
+            };
+            xhr.open('POST', '/comment/' + twitId + '/content/' + param);
+            xhr.send();
+          }
+      });
+    });     
     [].forEach.call(document.querySelectorAll('.twit-like'), function (tag) {
       tag.addEventListener('click', function () {
         var isLoggedIn = document.querySelector('#my-id');
@@ -168,7 +214,7 @@ block content
         if (isLoggedIn) {
           var xhr = new XMLHttpRequest();
           xhr.onload = function () {
-            if (xhr.status === 200) {
+             if (xhr.status === 200) {
               location.reload();
             } else {
               console.error(xhr.responseText);
@@ -185,7 +231,7 @@ block content
         var twitId = tag.parentNode.querySelector('.twit-id').value;
         if (isLoggedIn) {
           var xhr = new XMLHttpRequest();
-          xhr.onload = function () {
+          xhr.onload = function (commentPost) {
             if (xhr.status === 200) {
               location.reload();
             } else {
@@ -216,4 +262,36 @@ block content
           }
         }
       });
-    });   
+    });
+    [].forEach.call(document.querySelectorAll('.delete-btn'), function (tag) {
+      tag.addEventListener('click', function () {
+        var isLoggedIn = document.querySelector('#my-id');
+        var commentId = tag.parentNode.querySelector('.comment-id').value;
+        if (isLoggedIn) {
+          if (confirm('댓글을 삭제하시겠습니까?')) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                location.reload();
+              } else {
+                console.error(xhr.responseText);
+              }
+            };
+            xhr.open('DELETE', '/comment/' + commentId);
+            xhr.send();
+          }
+        }
+      });
+    });     
+    [].forEach.call(document.querySelectorAll('#comBtn'), function (tag) {
+      tag.addEventListener('click', function () {
+        var element = tag.parentNode.querySelector('#commentTable');
+        element.style.display= '';
+      });
+    });          
+    [].forEach.call(document.querySelectorAll('#closeBtn'), function (tag) {
+      tag.addEventListener('click', function () {
+        var element = tag.parentNode.querySelector('#commentTable');
+        element.style.display= 'none';
+      });
+    });          

@@ -112,7 +112,28 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
 .twit-author { display: inline-block; font-weight: bold; margin-right: 10px; }
 .twit-time { float: right; text-align: right; font-size: 12px; margin-right: 15px; }
 .twit-liker { float: right; text-align: right; font-size: 14px; margin-right: 10px; color: crimson; } 
- #best-img { float: right; margin-right: 10px;  } 
+ #best-img { float: right; margin-right: 10px;  }
+ .delete-btn {
+    display: inline-block;
+    position: relative;
+    margin: 0 20px 0 7px;
+    padding: 0;
+    width: 4px;
+    height: 20px;
+    background: #000;
+    transform: rotate(45deg);
+}
+.delete-btn:before {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    width: 20px;
+    height: 4px;
+    margin-top: -2px;
+    background: #000;
+}
 .twit-follow {
   padding: 1px 5px;
   background: #fff;
@@ -132,6 +153,33 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   cursor: pointer;
 }
 .twit-like {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.comment-btn{
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.commnet-more {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: crimson;
+  font-size: 12px;
+  cursor: pointer;
+}
+.commnet-close {
   padding: 1px 5px;
   background: #fff;
   border: 1px solid silver;
@@ -174,3 +222,6 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
 #join-form { padding: 10px; text-align: center; }
 #hashtag-form { text-align: right; }
 footer { text-align: center; }
+span {
+    cursor: pointer;
+}

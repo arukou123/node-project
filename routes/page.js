@@ -2,7 +2,7 @@
 
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { Post, User, Hashtag } = require('../models');    //메인 페이지 로딩 시 메인 페이지와 게시글을 함께 로딩
+const { Post, User, Hashtag, Comment } = require('../models');    //메인 페이지 로딩 시 메인 페이지와 게시글을 함께 로딩
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
 const router = express.Router();
@@ -49,18 +49,24 @@ router.get('/page/:cur', (req, res, next) => {
 		}, {
 			model: User,
 			attributes: ['id', 'nick'],
+		}, {
+			model: Comment,
+			attributes: ['id','content', 'createdAt', 'userId', 'commenter'],
 		}],
 			offset: offset,
 			limit: 5,
-		order: [['createdAt', 'DESC']],      //게시글 순서는 최신순으로 정렬
+		order: [
+			[  'createdAt', 'DESC'],
+			[  Comment, 'createdAt', 'DESC']
+			],      //게시글 순서는 최신순으로 정렬
 	})
 		.then((posts) => {
 			var str = JSON.stringify(posts);
+			console.log(str.comment);
 			console.log('가능?'+str);
 			totalPageCount = posts.count;
 			var curPage = req.params.cur;
 			console.log("현재 페이지 : " + curPage, "전체 카운트 : " + totalPageCount);
-			
 			if (totalPageCount < 0) {
 				totalPageCount = 0;
 				}
@@ -140,10 +146,16 @@ router.get('/page/:cur/hashtag', (req, res, next) => {
 		},{
 			model: User,
 			attributes: ['id', 'nick'],
+		}, {
+			model: Comment,
+			attributes: ['id','content', 'createdAt', 'userId', 'commenter'],
 		}],
 			offset: offset,
 			limit: 5,
-		order: [['createdAt', 'DESC']],      //게시글 순서는 최신순으로 정렬
+		order: [
+			[  'createdAt', 'DESC'],
+			[  Comment, 'createdAt', 'DESC']
+		],      //게시글 순서는 최신순으로 정렬
 	})
 		.then((posts) => {
 			var str = JSON.stringify(posts);

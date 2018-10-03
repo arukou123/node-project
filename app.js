@@ -7,6 +7,7 @@ const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
+const bodyParser = require('body-parser');   
 //------채팅방-------
 const ColorHash = require('color-hash');    //사용자에게 고유한 색상 부여
 const helmet = require('helmet'); // 서버의 각종 취약점 보완
@@ -23,6 +24,7 @@ const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const chatRouter = require('./routes/chat');
+const commentRouter = require('./routes/comment');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');   //require('./passport/index.js)와 같다. 폴더 내의 index.js 파일은 require시 생략 가능
 const logger = require('./logger'); //위험도 로그 사용
@@ -102,6 +104,7 @@ app.use('/', pageRouter);
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
+app.use('/comment', commentRouter);
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');

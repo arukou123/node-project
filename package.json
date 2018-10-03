@@ -4,8 +4,8 @@
   "description": "익스프레스로 만드는 SNS 서비스",
   "main": "app.js",
   "scripts": {
-	"test": "echo \"Error: no test specified\" && exit 1",
-	"start": "cross-env NODE_ENV=production PORT=80 pm2 start app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production PORT=80 pm2 start app.js",
     "dev": "nodemon app"
   },
   "author": "JiWoong",
@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bcrypt": "^3.0.0",
+    "body-parser": "^1.18.3",
     "color-hash": "^1.0.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
