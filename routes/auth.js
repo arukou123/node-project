@@ -17,6 +17,11 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {   //회원가입
       req.flash('joinError', '이미 가입된 이메일입니다.');
       return res.redirect('/join');
     }
+    const exNick = await User.find({ where: { nick } });   //await는 ~가 될때까지 기다리겠다는 뜻.   User.find로 데이터베이스에 email이 같은게 있는지 검색후 다음으로 진행
+    if (exNick) {     //같은게 있으면 flash 메세지를 설정하고 회원가입 페이지로
+      req.flash('joinError', '이미 가입된 닉네임입니다.');
+      return res.redirect('/join');
+    }
     const hash = await bcrypt.hash(password, 12);      //비밀번호는 암호화해서 저장. bcrypt 모듈 사용. bcryp의 hash 메서드를 사용해 손쉽게 암호화. 
     await User.create({									//12는 반복횟수. 12 이상을 추천. 31까지 가능
       email,
@@ -40,7 +45,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
     }
     if (!user) {
       req.flash('loginError', info.message);
-      return res.redirect('/');
+      return res.redirect('/page/1');
     }
     return req.login(user, (loginError) => {
       if (loginError) {
