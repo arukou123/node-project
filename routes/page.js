@@ -226,7 +226,8 @@ router.get('/page/:cur/recommend', (req, res, next) => {
 	}
 	console.log("오프셋" + offset);
 	Post.findAndCount({
-		where: {recommend: { [Op.gt]: 2 }, },
+		distinct: true,
+		where: {recommend: { [Op.gte]: 1 }, },
 		include: [
 			{
 			model: User,    //찾을 때 좋아요를 누른 사람도 찾는다
