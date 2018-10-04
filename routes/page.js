@@ -207,6 +207,91 @@ router.get('/page/:cur/hashtag', (req, res, next) => {
 
 
 
+router.get('/page/:cur/recommend', (req, res, next) => {   
+	//-------------------------------//
+	//페이지당 게시물 수 : 한 페이지 당 5개 게시물
+	var page_size= 5;
+	//페이지의 갯수 : 1 ~ 5개 페이지
+	var page_list_size = 5;
+	//limit 변수
+	var no ='';
+	//전체 게시물의 숫자
+	var totalPageCount = 0;
+	
+	var pageNum = req.params.cur;
+	var offset = 0;
+	console.log("페이지"+ pageNum);
+	if(pageNum > 1) {
+		offset = 5 * (pageNum - 1);
+	}
+	console.log("오프셋" + offset);
+	Post.findAndCount({
+		where: {recommend: { [Op.gt]: 2 }, },
+		include: [
+			{
+			model: User,    //찾을 때 좋아요를 누른 사람도 찾는다
+			attributes: ['id', 'nick'],
+			as: 'Liker',
+		}, {
+			model: User,
+			attributes: ['id', 'nick'],
+		}, {
+			model: Comment,
+			attributes: ['id','content', 'createdAt', 'userId', 'commenter'],
+		}],
+			offset: offset,
+			limit: 5,
+		order: [
+			[  'createdAt', 'DESC'],
+			[  Comment, 'createdAt', 'DESC']
+			],      //게시글 순서는 최신순으로 정렬
+	})
+		.then((posts) => {
+			var str = JSON.stringify(posts);
+			console.log(str.comment);
+			console.log('가능?'+str);
+			totalPageCount = posts.count;
+			var curPage = req.params.cur;
+			console.log("현재 페이지 : " + curPage, "전체 카운트 : " + totalPageCount);
+			if (totalPageCount < 0) {
+				totalPageCount = 0;
+				}
+
+				var totalPage = Math.ceil(totalPageCount / page_size);// 전체 페이지수
+				var totalSet = Math.ceil(totalPage / page_list_size); //전체 세트수
+				var curSet = Math.ceil(curPage / page_list_size); // 현재 셋트 번호
+				var startPage = ((curSet - 1) * 5) + 1; //현재 세트내 출력될 시작 페이지
+				var endPage = (startPage + page_list_size) - 1; //현재 세트내 출력될 마지막 페이지
+				
+			//현재페이지가 0 보다 작으면
+			if (endPage > totalPage) {
+				endPage = totalPage;
+			}
+			var result2 = {
+					"curPage": curPage,
+					"page_list_size": page_list_size,
+					"page_size": page_size,
+					"totalPage": totalPage,
+					"totalSet": totalSet,
+					"curSet": curSet,
+					"startPage": startPage,
+					"endPage": endPage
+					};
+			var str2 = JSON.stringify(result2);
+			console.log("최종" + str2);
+			res.render('recommend', {
+				title: 'NodeBird',
+				twits: posts.rows,
+				user: req.user,      //pug에서 user 객체를 통해 사용자 정보에 접근할 수 있게 되었다.
+				paging: result2,
+				loginError: req.flash('loginError'), //에러 메세지를 보여주기 위해 flash 메시지가 연결됨.
+		});
+	})
+	.	catch((error) => {
+		console.error(error);
+		next(error);
+	});
+});
 
 
 

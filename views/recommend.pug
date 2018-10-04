@@ -109,19 +109,19 @@ block content
         a#my-profile.btn(href=postPageUrl) 다음페이지 
     if(!tag)
       if curSet > 1
-        -var prePageUrl = '/page/' + (startPage -1) ;
+        -var prePageUrl = '/page/' + (startPage -1) + '/recommend' ;
         a#my-profile.btn(href=prePageUrl) 이전페이지  
       -for (i = startPage; i <= endPage; i++)
         -pageVar = i;
-        -var pageUrl = '/page/' + pageVar ;
+        -var pageUrl = '/page/' + pageVar + '/recommend' ;
           if curPage == pageVar
             a#my-profile.btn(href=pageUrl) #{pageVar} 
           else if curPage !== pageVar
             a#my-profile.btest(href=pageUrl) #{pageVar}    
       if curSet < totalSet
-        -var postPageUrl = '/page/' + (endPage +1) ;
+        -var postPageUrl = '/page/' + (endPage +1) + '/recommend' ;
         a#my-profile.btn(href=postPageUrl) 다음페이지 
-    a.recommend_btn(href='/page/1/recommend') 추천글                      
+    a.recommend_btn(href='/page/1') 게시판                      
   script.
     if (document.getElementById('img')) {
       document.getElementById('img').addEventListener('change', function (e) {

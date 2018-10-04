@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => (   //게시글 등록자의 아이�
 				type: DataTypes.STRING(200),
 				allowNull: true,
 			},
+			recommend: {
+				type: DataTypes.INTEGER,
+				defaultValue: '0',
+			},
 		}, {
 			timestamps: true,     //createdAt, updatedAt 컬럼 추가
 			paranoid: true,		  //deletedAt 컬럼 추가

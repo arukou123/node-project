@@ -116,7 +116,9 @@ router.get('/hashtag', async (req, res, next) => {     //해시태그로 조회�
 router.post('/:id/like', async(req, res, next) => {
 	try{
 		const post = await Post.find({ where: { id: req.params.id}});  //좋아요가 눌린 게시글
+		const postRecommend = post.recommend;
 		await post.addLiker(req.user.id); //req.user.id는 게시글에 좋아요를 누른 사람
+		const recommend = await Post.update({ recommend: postRecommend +1 }, { where : { id: req.params.id}});
 		res.send('OK');
 	} catch (error) {
 		console.error(error);
@@ -127,7 +129,9 @@ router.post('/:id/like', async(req, res, next) => {
 router.delete('/:id/unlike', async (req, res, next) => {
 	try {
 		const post = await Post.find({ where: { id: req.params.id}});
+		const postRecommend = post.recommend;
 		await post.removeLiker(req.user.id);
+		const recommend = await Post.update({ recommend: postRecommend -1 }, { where : { id: req.params.id}});
 		res.send('OK');
 	} catch(error) {
 		console.error(error);
