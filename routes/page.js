@@ -42,6 +42,7 @@ router.get('/page/:cur', (req, res, next) => {
 	}
 	console.log("오프셋" + offset);
 	Post.findAndCount({
+		distinct: true,
 		include: [{
 			model: User,    //찾을 때 좋아요를 누른 사람도 찾는다
 			attributes: ['id', 'nick'],
@@ -136,6 +137,7 @@ router.get('/page/:cur/hashtag', (req, res, next) => {
 		return res.redirect('/page/1');
 	}
 	Post.findAndCount({
+		distinct: true,
 		include: [{    // 조인할 대상을 include에 배열로 넘겨준다. 
 			model: User,   //post 모델에 User을 조인함. 작성자를 가져옴
 			attributes: ['id', 'nick'],      //JSON해서 제공
