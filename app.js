@@ -30,9 +30,11 @@ const passportConfig = require('./passport');   //require('./passport/index.js)�
 const logger = require('./logger'); //위험도 로그 사용
 
 const app = express();
+app.locals.pretty = true; //템플릿 엔진 코드에 들여쓰기 적용해주는 코드
 connect();
 sequelize.sync();  //모델을 서버와 연결
 passportConfig(passport);
+
 
 
 

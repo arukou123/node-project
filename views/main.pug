@@ -52,7 +52,7 @@ block content
             .twit-liker= `추천   ${liker}`
           else if liker < 5 
             .twit-liker= `추천   ${liker}`
-          .twit-content(style='padding-top:40px; padding-bottom:40px;')= twit.content
+          .twit-content(style='padding-top:40px; padding-bottom:40px; white-space:pre;')= twit.content
           if twit.img
             .twit-img
               img(src=twit.img alt='섬네일')
