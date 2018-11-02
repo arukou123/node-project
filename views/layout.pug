@@ -21,7 +21,6 @@ html
             input#my-id(type='hidden' value=user.id)
             a#my-profile.btn(href='/profile') 내 프로필
             a#logout.btn(href='/auth/logout') 로그아웃
-            a#logout.btn(href='/chat') 익명채팅방
           else
             form#login-form(action='/auth/login' method='post')
               .input-group
