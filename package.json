@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=production PORT=80 pm2 start app.js",
+    "stop": "pm2 kill",
     "dev": "nodemon app"
   },
   "author": "JiWoong",
